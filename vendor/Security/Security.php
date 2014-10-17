@@ -91,7 +91,7 @@ class Security
       2.	Si erreur, return (boolean) false.
      */
 
-    public function checkParameters($data)
+    public function ParametersIsValid($data)
     {
 
         $entity = strtolower(str_replace(array('BackOffice\Controller\\', 'Controller'), '', get_called_class()));
@@ -117,11 +117,12 @@ class Security
         {
             // On va vérifier les données
             $this->valideParameters($data, ${entity});
+           return ( !in_array(false, $data, true)) ? false : true;
             return $data;
         }
         else
         {
-            return array(false);
+            return false;
         }
     }
 
