@@ -13,11 +13,8 @@ class membreController extends Controller
     public function connexion()
     {
         $request = new Request();
-        if ($request->isConnected())
-        {
-            $this->profil();
-            exit();
-        }
+        $this->returnProfil($request);
+        
         $membre = $this->getRepository('membre');
         if ($request->getMethod() == "POST")
         {
@@ -142,24 +139,28 @@ class membreController extends Controller
         }
     }
 
-    public function inscription()
+    private function returnProfil(Request $request)
     {
-        $request = new Request();
         if ($request->isConnected())
         {
             $this->profil();
             exit();
         }
+    }
+    
+    public function inscription()
+    {
+        $request = new Request();
+        // if the member is connected , you redirect at his profil.
+        $this->returnProfil($request);
         
         if ($request->getMethod() == "POST")
         {
             $dataPost = $request->getParameters("POST");
             $dataPlus = array("statut_membre" => "0", "role_id" => 1, "token_valid" => null, "token_mdp" => null, "photo" => "gravatar.jpg", "token_secu" => md5(rand(1, 200) * time()));
-            $dataPost = array_merge($dataPost,$dataPlus);
-            // On vérifie les données récupérées avec les valeurs attendues
-            $data = $request->checkParameters("membre", $dataPost, $dataPlus);
-            // On vérifie s'il ya des erreurs dans les données envoyées
-            if (!in_array(false, $data, true))
+            $data = array_merge($dataPost,$dataPlus);
+            // if the datas are valid then we save them
+            if ($request->ParametersIsValid($data))
             {
                 // we hydrate member's Objet
                 $member= $this->getEntity("membre")->hydrate($data);
@@ -170,14 +171,14 @@ class membreController extends Controller
                 $reponse = $reponse['reponse'];
                 if (empty($reponse['reponse']) && !$request->isAdmin())
                 {
-                    // si on compte membre a été créer on envoie un mail au membre
+                    // After the member has created , we send a email
                     $sujet = 'Activation de votre compte';
-                    $message = '<h3>Bonjour ,' . ucfirst($dataSave['prenom']) . ' ' . strtoupper($dataSave['nom']) . '.</h3>' . "\r\t\t" .
-                            '<p>Pour activer votre compte, <strong><a href="' . WEBROOT . 'web/index.php?controller=membre&action=activation&email=' . $dataSave['email'] . '&token_secu=' . $dataSave['token_secu'] . '"> cliquez sur ce lien</a></strong>.</p>' . "\r\t\t" .
+                    $message = '<h3>Bonjour ,' . ucfirst($member->getPrenom()) . ' ' . strtoupper($member->getNom()) . '.</h3>' . "\r\t\t" .
+                            '<p>Pour activer votre compte, <strong><a href="' . WEBROOT . 'web/index.php?controller=membre&action=activation&email=' . $member->getEmail(). '&token_secu=' . $member->getToken_secu(). '"> cliquez sur ce lien</a></strong>.</p>' . "\r\t\t" .
                             '<p>Cordialement,</p>' . "\r\t\t" .
                             '<strong><p>L\'équipe LOKISALLE.</p></strong>';
                     $expediteur = array("Lokisalle" => CONTACT_MAIL_LOKISALLE);
-                    $destinateur = array("$dataSave[prenom] $dataSave[nom]" => $dataSave['email']);
+                    $destinateur = array($member->getPrenom()." ".$member->getNom() => $member->getEmail());
                     $email = new SendEmail($expediteur, $destinateur, $sujet, $message);
                     $email->send();
                     $alert = array("success","Vous venez de recevoir un mail pour activer votre compte! ");
@@ -187,7 +188,7 @@ class membreController extends Controller
             }
             else
             {
-                $reponse = $dataReponse;
+                $reponse = $dataPost;
                 $alert = array();
             }
 
@@ -220,11 +221,7 @@ class membreController extends Controller
     public function activation($arg)
     {
         $request = new Request();
-        if ($request->isConnected())
-        {
-            $this->profil();
-            exit();
-        }
+        $this->returnProfil($request);
         $membre = $this->getRepository('membre');
         $filtre = array("m.statut_membre = '0'");
 
@@ -251,11 +248,7 @@ class membreController extends Controller
     public function passOublie()
     {
         $request = new Request();
-        if ($request->isConnected())
-        {
-            $this->profil();
-            exit();
-        }
+        $this->returnProfil($request);
         $membre = $this->getRepository('membre');
         if ($request->isAjax())
         {
@@ -314,11 +307,7 @@ class membreController extends Controller
     public function initPass($arg = array())
     {
         $request = new Request();
-        if ($request->isConnected())
-        {
-            $this->profil();
-            exit();
-        }
+        $this->returnProfil($request);
         $dataGet = array();
         $membre = $this->getRepository('membre');
         // le formulaire a été soumis
