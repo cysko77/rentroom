@@ -35,12 +35,12 @@ class Controller
     * @parameters (string) $table
     * @return	(object)
     */
-    public function getRepository($table, $parameters = null)
+    public function getRepository($table)
     {
         $class = 'BackOffice\Repository\\' . htmlentities($table, ENT_QUOTES) . 'Repository';
         if (!isset($this->table))
         {
-            ($parameters !==null) ? $this->table = new $class($parameters) : new $class();
+            $this->table = new $class();
         }
         return $this->table;
     }
