@@ -50,7 +50,7 @@ class membreEntity extends membreRepository{
     
     public function setMdp($mdp)
     {
-        $this->_speudo=$mdp;
+        $this->_speudo=md5($mdp);
     }
     
     public function getNom()
