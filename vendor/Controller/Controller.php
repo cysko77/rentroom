@@ -14,6 +14,11 @@ class Controller
      */
     protected $table;
     /*
+    /*
+     * @variable (objet)
+     */
+    protected $entity;
+    /*
      * @variable (integer)
      */
     protected $end;
@@ -43,6 +48,22 @@ class Controller
             $this->table = new $class();
         }
         return $this->table;
+    }
+    
+    
+    /**
+    * Cette méthode permet d'instancier le model correspondant au controller appelé
+    * @parameters (string) $table
+    * @return	(object)
+    */
+    public function getEntity($entity)
+    {
+        $class = 'BackOffice\Entity\\' . htmlentities($entity, ENT_QUOTES) . 'Entity';
+        if (!isset($this->entity))
+        {
+            $this->entity = new $class();
+        }
+        return $this->entity;
     }
 
     /**
