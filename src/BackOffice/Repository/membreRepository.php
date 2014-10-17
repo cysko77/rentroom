@@ -14,19 +14,8 @@ class membreRepository extends EntityRepository
      */
     protected $unique = array();
     
-    public function __construct($array=array()) 
-    {
-        //Hydrate objet
-        $membre = new membreEntity();
-        if(count($array) >0) 
-        {
-            $membre->hydrate($array);
-            return $membre;
-        }
-            
-    }
 
-    /**
+    /*
      * return member 
      * @parameters  (array)$fil && (array)$etri  
      * $fil = filtre les données et $tri = trie les données retournées
@@ -50,7 +39,7 @@ class membreRepository extends EntityRepository
     }
 
 
-    /**
+    /*
      * Cette méthode permet d'ajouter un membre
      * @parameters  (array)$data  
      * $data => données relatives aux infos du "membre"
@@ -92,7 +81,7 @@ class membreRepository extends EntityRepository
         return array("reponse" => $data, "alert" => $alert);
     }
 
-    /**
+    /*
      * Cette méthode permet de savoir si le membre existe déjà avant de l'ajouter 
      * @parameters  (array)$data
      * $data => données relatives aux infos du "membre"
@@ -119,7 +108,7 @@ class membreRepository extends EntityRepository
         }
     }
 
-    /**
+    /*
      * Cette méthode permet de supprimer un membre 
      * @parameters  (integer)$id
      * $id => id du membre
@@ -138,7 +127,7 @@ class membreRepository extends EntityRepository
         }
     }
 
-    /**
+    /*
      * Cette méthode permet de modifier les informations du membre
      * @parameters  (array)$data
      * $data => données relatives aux infos du "membre"
@@ -167,7 +156,7 @@ class membreRepository extends EntityRepository
         return array("reponse" => $data, "alert" => $alert);
     }
 
-    /**
+    /*
      * Cette méthode permet de récupérer les commandes d'un produit
      * @parameters  (integer)$id
      * $id => id du "membre"
