@@ -165,9 +165,9 @@ class membreController extends Controller
                 $dataSave = $dataReponse + $dataPlus;
                 $dataSave['mdp'] = md5($dataSave['mdp']);
                 // On récupère la reponse 
-
-                $membre = $this->getRepository('membre', $dataSave);
-                $reponse = $membre->ajouterMembre($membre);
+                $data= $this->getEntity("membre");
+                $membre = $this->getRepository('membre');
+                $reponse = $membre->ajouterMembre($data);
                 $alert = $reponse['alert'];
                 $reponse = $reponse['reponse'];
                 if (empty($reponse['reponse']) && !$request->isAdmin())
