@@ -13,17 +13,14 @@ class EntityRepository
 
     private $db;
 
-    public function __construct($array=array()) 
-    {
-        (count($array) >0) ? $this->hydrate($array) : true;
-    }
+    
     /*
      * Pour hydratyer un objet
      * @parameters (array)
      * @return void
      *      
      */
-    private function hydrate($array)
+    protected function hydrate($array)
     {
         foreach($array as $key => $value)
         {
@@ -32,9 +29,10 @@ class EntityRepository
                 $methode = "set".ucfirst($key);
                 if(method_exists($this, $methode))
                 {
-                    $this->$method($value);
+                    $this->$methode($value);
                 }
             }
+
         }
     }
     
