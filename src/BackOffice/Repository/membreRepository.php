@@ -56,7 +56,7 @@ class membreRepository extends EntityRepository
      * $data => données relatives aux infos du "membre"
      * @return	array
      */
-    public function ajouterMembre(membreEntity $membre)
+    public function create(membreEntity $membre)
     {
         if ($this->membreNotExit($membre))
         {
