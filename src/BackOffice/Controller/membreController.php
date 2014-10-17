@@ -154,20 +154,18 @@ class membreController extends Controller
         if ($request->getMethod() == "POST")
         {
             $dataPost = $request->getParameters("POST");
-            // $dataplus=> Correspond au données rajoutées juste avant l'enregistrement dans BDD(Ils n'apparaissent pas dans le formulaire)
             $dataPlus = array("statut_membre" => "0", "role_id" => 1, "token_valid" => null, "token_mdp" => null, "photo" => "gravatar.jpg", "token_secu" => md5(rand(1, 200) * time()));
+            $dataPost = array_merge($dataPost,$dataPlus);
             // On vérifie les données récupérées avec les valeurs attendues
-            $dataReponse = $request->checkParameters("membre", $dataPost, $dataPlus);
+            $data = $request->checkParameters("membre", $dataPost, $dataPlus);
             // On vérifie s'il ya des erreurs dans les données envoyées
-            if (!in_array(false, $dataReponse, true))
+            if (!in_array(false, $data, true))
             {
-                // On tente de sauvegarde  les données.
-                $dataSave = $dataReponse + $dataPlus;
-                $dataSave['mdp'] = md5($dataSave['mdp']);
-                // On récupère la reponse 
-                $data= $this->getEntity("membre")->hydrate($dataSave);
-                $membre = $this->getRepository('membre');
-                $reponse = $membre->create($data);
+                // we hydrate member's Objet
+                $member= $this->getEntity("membre")->hydrate($data);
+                //We save the member
+                $manager = $this->getRepository('membre');
+                $reponse = $manager->create($member);
                 $alert = $reponse['alert'];
                 $reponse = $reponse['reponse'];
                 if (empty($reponse['reponse']) && !$request->isAdmin())
