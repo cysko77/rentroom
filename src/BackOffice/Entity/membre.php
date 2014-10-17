@@ -1,6 +1,10 @@
 <?php
+namespace BackOffice\Entity;
 
-class membreEntity{
+use BackOffice\Repository\membreRepository;
+
+class membreEntity extends membreRepository{
+    
     private $_id;
     private $_pseudo;
     private $_mdp;
