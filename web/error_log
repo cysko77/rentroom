@@ -1,0 +1,2 @@
+[01-Sep-2014 00:00:09 Europe/Paris] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/webse791/public_html/lokisalle/vendor/debug.php:1) in /home/webse791/public_html/lokisalle/src/BackOffice/Views/layout.php on line 2
+[01-Oct-2014 00:00:04 Europe/Paris] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/webse791/public_html/lokisalle/vendor/debug.php:1) in /home/webse791/public_html/lokisalle/src/BackOffice/Views/layout.php on line 2
