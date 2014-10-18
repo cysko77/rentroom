@@ -91,12 +91,10 @@ class Security
       2.	Si erreur, return (boolean) false.
      */
 
-    public function ParametersIsValid($data)
+    public function ParametersIsValid($entity, $data)
     {
 
-        $entity = strtolower(str_replace(array('BackOffice\Controller\\', 'Controller'), '', get_called_class()));
         require __DIR__ . "/../../src/BackOffice/Entities.php";
-
         // On compare les indices de 2 tableaux (ex: (array)$data et (array)$produit).
         $ArrayDiff = array_diff_key($data, ${$entity});
         if (!empty($ArrayDiff))
@@ -113,12 +111,14 @@ class Security
         // Si oui, on valide les données avec méthode valideParameters($arg1,$arg2)
         // Si non, on renvoi un message d'erreur.
         $arrayInter = array_intersect_key($data, ${$entity});
-        if ((count(${$entity}) - 1 == count($arrayInter) && !isset($data['id'])) || (count(${$entity} == count($arrayInter)) && isset($data['id'])))
+
+        if ((count(${$entity}) - 1 == count($arrayInter)) && !isset($data['id']) || (isset($data['id'])))
         {
             // On va vérifier les données
-            $this->valideParameters($data, ${entity});
-           return ( !in_array(false, $data, true)) ? false : true;
+            $this->valideParameters($data, ${$entity});
             return $data;
+           return ( !in_array(false, $data, true)) ? false : true;
+
         }
         else
         {
