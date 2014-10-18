@@ -160,12 +160,15 @@ class membreController extends Controller
             $dataPlus = array("statut_membre" => "0", "role_id" => 1, "token_valid" => null, "token_mdp" => null, "photo" => "gravatar.jpg", "token_secu" => md5(rand(1, 200) * time()));
             $data = array_merge($dataPost,$dataPlus);
             // if the datas are valid then we save them
-            if ($request->ParametersIsValid($data))
+   
+            if ($request->ParametersIsValid('membre',$data))
             {
                 // we hydrate member's Objet
-                $member= $this->getEntity("membre")->hydrate($data);
+                $member= $this->getEntity("membre",$data);
+                debug($member);
                 //We save the member
                 $manager = $this->getRepository('membre');
+                
                 $reponse = $manager->create($member);
                 $alert = $reponse['alert'];
                 $reponse = $reponse['reponse'];
