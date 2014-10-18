@@ -47,8 +47,10 @@ class membreRepository extends EntityRepository
      */
     public function create(membreEntity $membre)
     {
+
         if ($this->membreNotExit($membre))
         {
+
             $reponse = $this->save($membre);
             if ($reponse)
             {
@@ -87,16 +89,16 @@ class membreRepository extends EntityRepository
      * $data => données relatives aux infos du "membre"
      * @return	(boolean)
      */
-    public function membreNotExit($data)
+    public function membreNotExit($member)
     {
-        $filtre = array("(m.pseudo = '" . $data['pseudo'] . "' OR m.email = '" . $data['email'] . "')");
+        $filtre = array("(m.pseudo = '" . $member->getPseudo() . "' OR m.email = '" . $member->getEmail() . "')");
         if (count($reponse = $this->findMembreBy($filtre)) == 1)
         {
-            if ($data['email'] === $reponse[0]->email)
+            if ($member->getEmail() === $reponse[0]->email)
             {
                 $this->unique += array("email" => false);
             }
-            if ($data['pseudo'] === $reponse[0]->pseudo)
+            if ($member->getPseudo() === $reponse[0]->pseudo)
             {
                 $this->unique += array("pseudo" => false);
             }
