@@ -56,12 +56,17 @@ class Controller
     * @parameters (string) $table
     * @return	(object)
     */
-    public function getEntity($entity)
+    public function getEntity($entity, array $data)
     {
         $class = 'BackOffice\Entity\\' . htmlentities($entity, ENT_QUOTES) . 'Entity';
         if (!isset($this->entity))
         {
             $this->entity = new $class();
+           if($data)
+           {
+             $this->entity ->hydrate($data);
+           }
+              
         }
         return $this->entity;
     }
