@@ -14,28 +14,6 @@ class EntityRepository
     private $db;
 
     
-    /*
-     * Pour hydratyer un objet
-     * @parameters (array)
-     * @return void
-     *      
-     */
-    protected function hydrate($array)
-    {
-        foreach($array as $key => $value)
-        {
-            if(isset($this->$key))
-            {
-                $methode = "set".ucfirst($key);
-                if(method_exists($this, $methode))
-                {
-                    $this->$methode($value);
-                }
-            }
-
-        }
-    }
-    
     /**
      * Cette méthode permet de recupérer l'objet PDO (connection BDD)  
      * @return	(object)
@@ -211,15 +189,17 @@ class EntityRepository
 
         $fields = "";
         $values = "";
-        if (isset($data['id']))
+        if ($data->getId() !== null)
         {
             // Cas d'une requête UPDATE
-            $id = $data['id'];
-            unset($data['id']);
+            $id = $data->getId();
             $sql = "UPDATE " . $this->getTableName() . " SET ";
             foreach ($data as $key => $value)
             {
-                $sql .= "$key=:$key , ";
+                if($key)
+                {
+                    $sql .= "$key=:$key , ";
+                }
                 $dataSave[":$key"] = $value;
             }
             $dataSave[":id"] = $id;
@@ -232,7 +212,11 @@ class EntityRepository
             $sql = "INSERT INTO " . $this->getTableName();
             foreach ($data as $key => $value)
             {
-                // on recupère les champs de la requête 
+                // on recupère les champs de la requête
+               if(substr($key, 0, 1) ==="_")
+               {
+                   $key = substr($key, 1);
+               }
                 $fields .= $key . ", ";
                 // on recupère les valeurs 
                 $values .=":" . $key . ', ';
@@ -246,7 +230,7 @@ class EntityRepository
         }
         // On effectue la requête
         $query = $this->getDb()->prepare($sql);
-
+        debug($sql);
         try {
             $query->execute($dataSave);
         } catch (\PDOException $e) {
