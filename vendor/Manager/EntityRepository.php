@@ -27,6 +27,10 @@ class EntityRepository
         return $this->db;
     }
 
+    
+   
+  
+  
     /**
      * Cette méthode permet de recupérer le nom de la table  
      * @return	(string)
@@ -186,7 +190,7 @@ class EntityRepository
      */
     public function save($data)
     {
-
+ 
         $fields = "";
         $values = "";
         if ($data->getId() !== null)
@@ -210,6 +214,7 @@ class EntityRepository
         {
             // Cas d'une requête INSERT
             $sql = "INSERT INTO " . $this->getTableName();
+            $data = $data->getObjetToArray();
             foreach ($data as $key => $value)
             {
                 // on recupère les champs de la requête
@@ -230,7 +235,6 @@ class EntityRepository
         }
         // On effectue la requête
         $query = $this->getDb()->prepare($sql);
-        debug($sql);
         try {
             $query->execute($dataSave);
         } catch (\PDOException $e) {
