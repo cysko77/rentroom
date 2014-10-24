@@ -2,7 +2,7 @@
 
 namespace Entity;
 
-Class Entity
+Abstract Class Entity
 {
           /*
      * Pour hydratyer un objet
@@ -18,10 +18,22 @@ Class Entity
           $method = 'set'. ucfirst($key); 
           if(method_exists($this, $method))
           {
-              
               $this->$method($value);
           }
           
        }
   }
+
+
+ public function getObjetToArray() 
+    {      
+       $data = array();
+        foreach($this as $key => $value) 
+         {
+            $data[$key] = $value;
+        }
+        
+        return $data;
+    }
+    
 }
