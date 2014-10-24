@@ -165,10 +165,8 @@ class membreController extends Controller
             {
                 // we hydrate member's Objet
                 $member= $this->getEntity("membre",$data);
-                debug($member);
                 //We save the member
                 $manager = $this->getRepository('membre');
-                
                 $reponse = $manager->create($member);
                 $alert = $reponse['alert'];
                 $reponse = $reponse['reponse'];
