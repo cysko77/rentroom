@@ -50,7 +50,7 @@ class membreRepository extends EntityRepository
 
         if ($this->membreNotExit($membre))
         {
-
+            
             $reponse = $this->save($membre);
             if ($reponse)
             {
@@ -64,6 +64,7 @@ class membreRepository extends EntityRepository
         }
         else
         {
+            $reponse = 0;
             foreach ($this->unique as $key => $values)
             {
                 $method = "set".ucfirst($key);
@@ -80,7 +81,7 @@ class membreRepository extends EntityRepository
             }
             $alert = array("danger", "$alert");
         }
-        return array("reponse" => $data, "alert" => $alert);
+        return array("reponse" => $reponse, "alert" => $alert);
     }
 
     /*
@@ -89,7 +90,7 @@ class membreRepository extends EntityRepository
      * $data => données relatives aux infos du "membre"
      * @return	(boolean)
      */
-    public function membreNotExit($member)
+    private function membreNotExit($member)
     {
         $filtre = array("(m.pseudo = '" . $member->getPseudo() . "' OR m.email = '" . $member->getEmail() . "')");
         if (count($reponse = $this->findMembreBy($filtre)) == 1)
