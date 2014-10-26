@@ -170,7 +170,7 @@ class membreController extends Controller
                 $reponse = $manager->create($member);
                 $alert = $reponse['alert'];
                 $reponse = $reponse['reponse'];
-                if (empty($reponse['reponse']) && !$request->isAdmin())
+                if ($reponse && !$request->isAdmin())
                 {
                     // After the member has created , we send a email
                     $sujet = 'Activation de votre compte';
